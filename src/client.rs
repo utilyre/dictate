@@ -26,6 +26,7 @@ pub struct Meaning {
 
 #[derive(Debug, Deserialize)]
 pub struct Definition {
+    #[serde(rename = "definition")]
     pub brief: String,
     pub example: Option<String>,
 }
