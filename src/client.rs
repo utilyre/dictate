@@ -26,7 +26,7 @@ pub struct Meaning {
 
 #[derive(Debug, Deserialize)]
 pub struct Definition {
-    pub definition: String,
+    pub brief: String,
     pub example: Option<String>,
 }
 
