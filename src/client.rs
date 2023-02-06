@@ -1,5 +1,9 @@
-use std::error::Error;
+use std::{
+    error::Error,
+    fmt::{self, Display},
+};
 
+use colored::Colorize;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -7,6 +11,28 @@ pub struct Entry {
     pub word: String,
     pub phonetics: Vec<Phonetic>,
     pub meanings: Vec<Meaning>,
+}
+
+impl Display for Entry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut stringified = format!(
+            "{}{}{}",
+            "".white(),
+            self.word.bold().black().on_white(),
+            "".white()
+        );
+
+        if let Some(phonetic) = self.phonetics.iter().find(|p| p.text.is_some()) {
+            let text = phonetic
+                .text
+                .as_ref()
+                .expect("should never be the None variant");
+
+            stringified.push_str(&format!(" {}", text.italic().bright_black()))
+        }
+
+        write!(f, "{}", stringified)
+    }
 }
 
 #[derive(Debug, Deserialize)]

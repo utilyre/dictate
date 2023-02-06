@@ -22,7 +22,12 @@ pub async fn run() -> Result<(), Error> {
         })
     })?;
 
-    dbg!(entries);
+    for (i, entry) in entries.iter().enumerate() {
+        println!("{}", entry);
+        if i < entries.len() - 1 {
+            println!();
+        }
+    }
 
     Ok(())
 }
