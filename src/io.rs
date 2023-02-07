@@ -12,7 +12,6 @@ impl Args {
             return Err("expected `word` as first argument");
         };
 
-
         Ok(Self { word })
     }
 }
