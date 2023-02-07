@@ -1,3 +1,5 @@
+mod entry;
+
 mod client;
 
 mod io;
