@@ -1,8 +1,9 @@
-mod entry;
+pub mod entry;
+pub use entry::Entry;
 
-mod client;
+pub mod client;
 
-mod io;
+pub mod io;
 
 pub struct Error {
     pub code: i32,
