@@ -28,7 +28,25 @@ impl Display for Entry {
                 .as_ref()
                 .expect("should never be the None variant");
 
-            stringified.push_str(&format!(" {}", text.italic().bright_black()))
+            stringified.push_str(&format!(" {}\n", text.italic().bright_black()))
+        }
+
+        for meaning in self.meanings.iter() {
+            stringified.push_str(&format!(
+                "\n\t{}",
+                meaning.part_of_speech.italic().underline()
+            ));
+
+            for definition in meaning.definitions.iter() {
+                stringified.push_str(&format!("\n\t\t{} {}\n", "•".blue(), definition.brief));
+
+                if let Some(example) = &definition.example {
+                    stringified.push_str(&format!(
+                        "\t\t  {}\n",
+                        format!("\"{}\"", example).bright_black()
+                    ));
+                }
+            }
         }
 
         write!(f, "{}", stringified)
