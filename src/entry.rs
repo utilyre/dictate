@@ -30,17 +30,27 @@ impl Display for Entry {
 
         for meaning in self.meanings.iter() {
             stringified.push_str(&format!(
-                "\n\t{}",
-                meaning.part_of_speech.italic().underline()
+                "\n{:indent$}{}",
+                "",
+                meaning.part_of_speech.italic().underline(),
+                indent = 2
             ));
 
             for definition in meaning.definitions.iter() {
-                stringified.push_str(&format!("\n\t\t{} {}\n", "•".blue(), definition.brief));
+                stringified.push_str(&format!(
+                    "\n{:indent$}{} {}\n",
+                    "",
+                    "•".blue(),
+                    definition.brief,
+                    indent = 4
+                ));
 
                 if let Some(example) = &definition.example {
                     stringified.push_str(&format!(
-                        "\t\t  {}\n",
-                        format!("\"{}\"", example).bright_black()
+                        "{:indent$}{}\n",
+                        "",
+                        format!("\"{}\"", example).bright_black(),
+                        indent = 6
                     ));
                 }
             }
