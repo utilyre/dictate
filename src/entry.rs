@@ -55,6 +55,38 @@ impl Display for Entry {
                     ));
                 }
             }
+
+            if !meaning.synonyms.is_empty() || !meaning.antonyms.is_empty() {
+                stringified.push('\n');
+            }
+            if !meaning.synonyms.is_empty() {
+                stringified.push_str(&format!(
+                    "{:indent$}{} {}\n",
+                    "",
+                    "Synonyms:".green(),
+                    meaning
+                        .synonyms
+                        .iter()
+                        .map(|s| format!("{}{}{}", "".white(), s.black().on_white(), "".white()))
+                        .collect::<Vec<String>>()
+                        .join(" "),
+                    indent = 4
+                ));
+            }
+            if !meaning.antonyms.is_empty() {
+                stringified.push_str(&format!(
+                    "{:indent$}{} {}\n",
+                    "",
+                    "Antonyms:".green(),
+                    meaning
+                        .antonyms
+                        .iter()
+                        .map(|s| format!("{}{}{}", "".white(), s.black().on_white(), "".white()))
+                        .collect::<Vec<String>>()
+                        .join(" "),
+                    indent = 4
+                ));
+            }
         }
 
         write!(f, "{}", stringified)
