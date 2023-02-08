@@ -20,12 +20,7 @@ impl Display for Entry {
         );
 
         if let Some(phonetic) = self.phonetics.iter().find(|p| p.text.is_some()) {
-            let text = phonetic
-                .text
-                .as_ref()
-                .expect("should never be the None variant");
-
-            stringified.push_str(&format!(" {}", text.italic().bright_black()));
+            stringified.push_str(&format!(" {}", phonetic));
         }
 
         stringified.push('\n');
@@ -96,6 +91,20 @@ impl Display for Entry {
 #[derive(Debug, Deserialize)]
 struct Phonetic {
     text: Option<String>,
+}
+
+impl Display for Phonetic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            self.text
+                .clone()
+                .unwrap_or("bruh".to_string())
+                .italic()
+                .bright_black()
+        )
+    }
 }
 
 #[derive(Debug, Deserialize)]
