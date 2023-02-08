@@ -25,9 +25,10 @@ impl Display for Entry {
                 .as_ref()
                 .expect("should never be the None variant");
 
-            stringified.push_str(&format!(" {}\n", text.italic().bright_black()));
+            stringified.push_str(&format!(" {}", text.italic().bright_black()));
         }
 
+        stringified.push('\n');
         for meaning in self.meanings.iter() {
             stringified.push_str(&format!(
                 "\n{:indent$}{}",
