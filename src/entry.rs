@@ -3,6 +3,8 @@ use std::fmt::{self, Display};
 use colored::Colorize;
 use serde::Deserialize;
 
+use crate::Indent;
+
 #[derive(Debug, Deserialize)]
 pub struct Entry {
     word: String,
@@ -35,24 +37,7 @@ impl Display for Entry {
             )?;
 
             for definition in meaning.definitions.iter() {
-                write!(
-                    f,
-                    "\n{:indent$}{} {}\n",
-                    "",
-                    "•".blue(),
-                    definition.brief,
-                    indent = 4
-                )?;
-
-                if let Some(example) = &definition.example {
-                    write!(
-                        f,
-                        "{:indent$}{}\n",
-                        "",
-                        format!("\"{}\"", example).bright_black(),
-                        indent = 6
-                    )?;
-                }
+                write!(f, "\n{}\n", definition.to_string().indent(4))?;
             }
 
             if !meaning.synonyms.is_empty() || !meaning.antonyms.is_empty() {
@@ -128,4 +113,21 @@ struct Definition {
     #[serde(rename = "definition")]
     brief: String,
     example: Option<String>,
+}
+
+impl Display for Definition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} {}", "•".blue(), self.brief)?;
+        if let Some(example) = &self.example {
+            write!(
+                f,
+                "\n{}{}{}",
+                "\"".bright_black(),
+                example.bright_black(),
+                "\"".bright_black()
+            )?;
+        }
+
+        Ok(())
+    }
 }
