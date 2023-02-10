@@ -12,50 +12,55 @@ pub struct Entry {
 
 impl Display for Entry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut stringified = format!(
+        write!(
+            f,
             "{}{}{}",
             "".white(),
             self.word.bold().black().on_white(),
             "".white()
-        );
+        )?;
 
         if let Some(phonetic) = self.phonetics.iter().find(|p| p.text.is_some()) {
-            stringified.push_str(&format!(" {}", phonetic));
+            write!(f, " {}", phonetic)?;
         }
 
-        stringified.push('\n');
+        write!(f, "\n")?;
         for meaning in self.meanings.iter() {
-            stringified.push_str(&format!(
+            write!(
+                f,
                 "\n{:indent$}{}",
                 "",
                 meaning.part_of_speech.italic().underline(),
                 indent = 2
-            ));
+            )?;
 
             for definition in meaning.definitions.iter() {
-                stringified.push_str(&format!(
+                write!(
+                    f,
                     "\n{:indent$}{} {}\n",
                     "",
                     "•".blue(),
                     definition.brief,
                     indent = 4
-                ));
+                )?;
 
                 if let Some(example) = &definition.example {
-                    stringified.push_str(&format!(
+                    write!(
+                        f,
                         "{:indent$}{}\n",
                         "",
                         format!("\"{}\"", example).bright_black(),
                         indent = 6
-                    ));
+                    )?;
                 }
             }
 
             if !meaning.synonyms.is_empty() || !meaning.antonyms.is_empty() {
-                stringified.push('\n');
+                write!(f, "\n")?;
             }
             if !meaning.synonyms.is_empty() {
-                stringified.push_str(&format!(
+                write!(
+                    f,
                     "{:indent$}{} {}\n",
                     "",
                     "Synonyms:".green(),
@@ -66,10 +71,11 @@ impl Display for Entry {
                         .collect::<Vec<String>>()
                         .join(" "),
                     indent = 4
-                ));
+                )?;
             }
             if !meaning.antonyms.is_empty() {
-                stringified.push_str(&format!(
+                write!(
+                    f,
                     "{:indent$}{} {}\n",
                     "",
                     "Antonyms:".green(),
@@ -80,11 +86,11 @@ impl Display for Entry {
                         .collect::<Vec<String>>()
                         .join(" "),
                     indent = 4
-                ));
+                )?;
             }
         }
 
-        write!(f, "{}", stringified)
+        Ok(())
     }
 }
 
