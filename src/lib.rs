@@ -1,3 +1,6 @@
+pub mod indent;
+pub use indent::Indent;
+
 pub mod entry;
 pub use entry::Entry;
 
