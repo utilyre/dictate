@@ -91,7 +91,7 @@ impl Display for Phonetic {
             "{}",
             self.text
                 .clone()
-                .unwrap_or("bruh".to_string())
+                .unwrap_or("_".to_string())
                 .italic()
                 .bright_black()
         )
