@@ -1,8 +1,5 @@
-pub mod indent;
-pub use indent::Indent;
-
-pub mod fold;
-pub use fold::Fold;
+pub mod string;
+pub use string::*;
 
 pub mod entry;
 pub use entry::Entry;
