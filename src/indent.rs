@@ -2,7 +2,7 @@ pub trait Indent {
     fn indent(&self, by: usize) -> String;
 }
 
-impl Indent for String {
+impl Indent for str {
     fn indent(&self, by: usize) -> String {
         let indentation = " ".repeat(by);
         indentation.clone() + &self.replace("\n", &format!("\n{}", indentation))
