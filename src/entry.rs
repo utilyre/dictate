@@ -68,7 +68,7 @@ struct Meaning {
 
 impl Display for Meaning {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "\n{}", self.part_of_speech.italic().underline(),)?;
+        write!(f, "\n{}", self.part_of_speech.italic().underline())?;
 
         for definition in self.definitions.iter() {
             write!(
