@@ -27,11 +27,7 @@ impl Display for Entry {
 
         write!(f, "\n")?;
         for meaning in self.meanings.iter() {
-            write!(
-                f,
-                "{}",
-                textwrap::indent(&meaning.to_string(), &" ".repeat(2))
-            )?;
+            write!(f, "{}", textwrap::indent(&meaning.to_string(), "  "))?;
         }
 
         Ok(())
@@ -72,11 +68,7 @@ impl Display for Meaning {
         write!(f, "\n{}", self.part_of_speech.italic().underline())?;
 
         for definition in self.definitions.iter() {
-            write!(
-                f,
-                "\n{}\n",
-                textwrap::indent(&definition.to_string(), &" ".repeat(2))
-            )?;
+            write!(f, "\n{}\n", textwrap::indent(&definition.to_string(), "  "))?;
         }
 
         if !self.synonyms.is_empty() || !self.antonyms.is_empty() {
