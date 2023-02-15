@@ -2,6 +2,7 @@ use std::fmt::{self, Display};
 
 use colored::Colorize;
 use serde::Deserialize;
+use textwrap::Options;
 
 #[derive(Debug, Deserialize)]
 pub struct Entry {
@@ -123,14 +124,24 @@ struct Definition {
 
 impl Display for Definition {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", "•".blue(), self.brief)?;
+        let options = Options::with_termwidth().subsequent_indent("  ");
+
+        write!(
+            f,
+            "{} {}",
+            "•".blue(),
+            textwrap::fill(&self.brief, &options)
+        )?;
+
         if let Some(example) = &self.example {
             write!(
                 f,
-                "\n{}{}{}",
+                "\n{:indent$}{}{}{}",
+                "",
                 "\"".bright_black(),
-                example.bright_black(),
-                "\"".bright_black()
+                textwrap::fill(&example, &options).bright_black(),
+                "\"".bright_black(),
+                indent = 2
             )?;
         }
 
