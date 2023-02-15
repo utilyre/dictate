@@ -4,7 +4,9 @@ pub trait Indent {
 
 impl Indent for str {
     fn indent(&self, by: usize) -> String {
-        let indentation = " ".repeat(by);
-        indentation.clone() + &self.replace("\n", &format!("\n{}", indentation))
+        self.lines()
+            .map(|line| " ".repeat(by) + line)
+            .collect::<Vec<String>>()
+            .join("\n")
     }
 }
