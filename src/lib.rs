@@ -1,6 +1,3 @@
-pub mod string;
-pub use string::*;
-
 pub mod entry;
 pub use entry::Entry;
 

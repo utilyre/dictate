@@ -3,8 +3,6 @@ use std::fmt::{self, Display};
 use colored::Colorize;
 use serde::Deserialize;
 
-use crate::Indent;
-
 #[derive(Debug, Deserialize)]
 pub struct Entry {
     word: String,
@@ -28,7 +26,11 @@ impl Display for Entry {
 
         write!(f, "\n")?;
         for meaning in self.meanings.iter() {
-            write!(f, "{}", meaning.to_string().indent(2))?;
+            write!(
+                f,
+                "{}",
+                textwrap::indent(&meaning.to_string(), &" ".repeat(2))
+            )?;
         }
 
         Ok(())
@@ -69,7 +71,11 @@ impl Display for Meaning {
         write!(f, "\n{}", self.part_of_speech.italic().underline(),)?;
 
         for definition in self.definitions.iter() {
-            write!(f, "\n{}\n", definition.to_string().indent(2))?;
+            write!(
+                f,
+                "\n{}\n",
+                textwrap::indent(&definition.to_string(), &" ".repeat(2))
+            )?;
         }
 
         if !self.synonyms.is_empty() || !self.antonyms.is_empty() {
