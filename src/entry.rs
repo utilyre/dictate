@@ -74,6 +74,7 @@ impl Display for Meaning {
         if !self.synonyms.is_empty() || !self.antonyms.is_empty() {
             write!(f, "\n")?;
         }
+        // FIXME: wrap words
         if !self.synonyms.is_empty() {
             write!(
                 f,
