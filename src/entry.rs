@@ -28,7 +28,7 @@ impl Display for Entry {
                 phonetic
                     .text
                     .clone()
-                    .expect("`text` should exist since `None` variants have been filtered")
+                    .expect("`text` should exist since the `None` variants have been filtered out")
                     .italic()
                     .bright_black()
             )?;
