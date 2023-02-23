@@ -1,16 +1,13 @@
 use clap::Parser;
+use cli::{Args, Color};
 use colored::control;
+use entry::Entry;
 use tokio::{fs, io::AsyncReadExt};
 use xdg::BaseDirectories;
 
-use cli::{Args, Color};
-
-pub mod entry;
-pub use entry::Entry;
-
-pub mod client;
-
 pub mod cli;
+pub mod client;
+pub mod entry;
 
 pub struct Error {
     pub code: i32,
