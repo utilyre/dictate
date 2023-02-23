@@ -35,6 +35,13 @@ pub async fn run() -> Result<(), Error> {
                 message: e.to_string(),
             })
         })?;
+
+        cache::append(&mut entries.clone()).await.or_else(|e| {
+            Err(Error {
+                code: 1,
+                message: e.to_string(),
+            })
+        })?;
     }
 
     for (i, entry) in entries.iter().enumerate() {

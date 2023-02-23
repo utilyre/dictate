@@ -1,10 +1,10 @@
 use std::fmt::{self, Display};
 
 use colored::Colorize;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use textwrap::Options;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Entry {
     pub word: String,
     phonetics: Vec<Phonetic>,
@@ -138,12 +138,12 @@ impl Display for Entry {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Phonetic {
     text: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Meaning {
     #[serde(rename = "partOfSpeech")]
     part_of_speech: String,
@@ -153,7 +153,7 @@ struct Meaning {
     antonyms: Vec<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Definition {
     #[serde(rename = "definition")]
     brief: String,
