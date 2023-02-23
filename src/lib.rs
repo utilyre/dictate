@@ -3,7 +3,7 @@ pub use entry::Entry;
 
 pub mod client;
 
-pub mod io;
+pub mod cli;
 
 pub struct Error {
     pub code: i32,
@@ -11,7 +11,7 @@ pub struct Error {
 }
 
 pub async fn run() -> Result<(), Error> {
-    let args = io::Args::parse().or_else(|e| {
+    let args = cli::Args::parse().or_else(|e| {
         Err(Error {
             code: 2,
             message: e.to_string(),
