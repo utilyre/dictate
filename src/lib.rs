@@ -5,9 +5,9 @@ use entry::Entry;
 use tokio::{fs, io::AsyncReadExt};
 use xdg::BaseDirectories;
 
-pub mod cli;
-pub mod client;
-pub mod entry;
+mod cli;
+mod client;
+mod entry;
 
 pub struct Error {
     pub code: i32,
