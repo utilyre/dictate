@@ -1,8 +1,9 @@
 use clap::Parser;
 
-use cli::Args;
+use cli::{Args, Color};
 
 pub mod entry;
+use colored::control;
 pub use entry::Entry;
 
 pub mod client;
@@ -16,6 +17,12 @@ pub struct Error {
 
 pub async fn run() -> Result<(), Error> {
     let args = Args::parse();
+
+    match args.color {
+        Color::Auto => (),
+        Color::Never => control::set_override(false),
+        Color::Always => control::set_override(true),
+    }
 
     let entries = client::fetch_word(&args.word).await.or_else(|e| {
         Err(Error {
