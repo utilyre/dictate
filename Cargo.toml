@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Amirabbas Fazelinia <utilyre@proton.me>"]
 license = "MIT"
-description = "Simple CLI utility for looking up words in dictionaryapi.dev"
+description = "Simple CLI utility for looking up words in online dictionary"
 repository = "https://github.com/utilyre/dictate"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
