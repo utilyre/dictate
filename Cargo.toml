@@ -16,3 +16,4 @@ tokio = { version = "1", features = ["full"] }
 colored = "2"
 clap = "4.1.4"
 textwrap = { version = "0.16", features = ["terminal_size"] }
+terminal_size = "0.2.5"

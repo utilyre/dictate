@@ -132,6 +132,7 @@ dependencies = [
  "colored",
  "reqwest",
  "serde",
+ "terminal_size",
  "textwrap",
  "tokio",
 ]
