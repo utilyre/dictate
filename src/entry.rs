@@ -6,7 +6,7 @@ use textwrap::Options;
 
 #[derive(Debug, Deserialize)]
 pub struct Entry {
-    word: String,
+    pub word: String,
     phonetics: Vec<Phonetic>,
     meanings: Vec<Meaning>,
 }
