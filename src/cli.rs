@@ -1,17 +1,8 @@
-use std::env;
+use clap::Parser;
 
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
 pub struct Args {
+    /// Word to look up in dictionary.
     pub word: String,
-}
-
-impl Args {
-    pub fn parse() -> Result<Self, &'static str> {
-        let mut args = env::args();
-        args.next();
-        let Some(word) = args.next() else {
-            return Err("expected `word` as first argument");
-        };
-
-        Ok(Self { word })
-    }
 }

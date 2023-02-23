@@ -1,3 +1,7 @@
+use clap::Parser;
+
+use cli::Args;
+
 pub mod entry;
 pub use entry::Entry;
 
@@ -11,12 +15,7 @@ pub struct Error {
 }
 
 pub async fn run() -> Result<(), Error> {
-    let args = cli::Args::parse().or_else(|e| {
-        Err(Error {
-            code: 2,
-            message: e.to_string(),
-        })
-    })?;
+    let args = Args::parse();
 
     let entries = client::fetch_word(&args.word).await.or_else(|e| {
         Err(Error {
