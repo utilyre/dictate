@@ -17,3 +17,4 @@ colored = "2"
 clap = { version = "4.1.4", features = ["derive"] }
 textwrap = { version = "0.16", features = ["terminal_size"] }
 terminal_size = "0.2.5"
+xdg = "2.4.1"
