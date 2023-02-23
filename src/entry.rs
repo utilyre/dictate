@@ -54,7 +54,7 @@ impl Display for Entry {
                 )
             )?;
 
-            for (i,definition) in meaning.definitions.iter().enumerate() {
+            for (i, definition) in meaning.definitions.iter().enumerate() {
                 if i > 0 {
                     write!(f, "\n")?;
                 }
@@ -83,39 +83,56 @@ impl Display for Entry {
                 }
             }
 
-            //
-        }
+            if !meaning.synonyms.is_empty() {
+                write!(
+                    f,
+                    "\n\n{}",
+                    textwrap::fill(
+                        &format!(
+                            "{} {}",
+                            "Synonyms:".green(),
+                            meaning
+                                .synonyms
+                                .iter()
+                                .map(|s| format!(
+                                    "{}{}{}",
+                                    "".white(),
+                                    s.black().on_white(),
+                                    "".white()
+                                ))
+                                .collect::<Vec<_>>()
+                                .join(" ")
+                        ),
+                        &depth2
+                    )
+                )?;
+            }
 
-        /*
-        if !self.synonyms.is_empty() {
-            write!(
-                f,
-                "{:indent$}{} {}\n",
-                "",
-                "Synonyms:".green(),
-                self.synonyms
-                    .iter()
-                    .map(|s| format!("{}{}{}", "".white(), s.black().on_white(), "".white()))
-                    .collect::<Vec<String>>()
-                    .join(" "),
-                indent = 2
-            )?;
+            if !meaning.antonyms.is_empty() {
+                write!(
+                    f,
+                    "\n\n{}",
+                    textwrap::fill(
+                        &format!(
+                            "{} {}",
+                            "Antonyms:".green(),
+                            meaning
+                                .antonyms
+                                .iter()
+                                .map(|a| format!(
+                                    "{}{}{}",
+                                    "".white(),
+                                    a.black().on_white(),
+                                    "".white()
+                                ))
+                                .collect::<Vec<_>>()
+                                .join(" ")
+                        ),
+                        &depth2
+                    )
+                )?;
+            }
         }
-        if !self.antonyms.is_empty() {
-            write!(
-                f,
-                "{:indent$}{} {}\n",
-                "",
-                "Antonyms:".green(),
-                self.antonyms
-                    .iter()
-                    .map(|s| format!("{}{}{}", "".white(), s.black().on_white(), "".white()))
-                    .collect::<Vec<String>>()
-                    .join(" "),
-                indent = 2
-            )?;
-        }
-        */
 
         Ok(())
     }
