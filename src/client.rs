@@ -6,7 +6,7 @@ use crate::entry::Entry;
 
 const BASE_URL: &str = "https://api.dictionaryapi.dev/api/v2";
 
-pub async fn fetch_word(word: &str) -> Result<Vec<Entry>, Box<dyn Error>> {
+pub async fn lookup_word(word: &str) -> Result<Vec<Entry>, Box<dyn Error>> {
     let client = Client::new();
     let response = client
         .get(format!("{}/entries/en/{}", BASE_URL, word))

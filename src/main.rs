@@ -38,7 +38,7 @@ async fn run() -> Result<(), Error> {
     })?;
 
     if entries.is_empty() {
-        entries = client::fetch_word(&args.word).await.or_else(|e| {
+        entries = client::lookup_word(&args.word).await.or_else(|e| {
             Err(Error {
                 code: 1,
                 message: e.to_string(),
