@@ -3,10 +3,11 @@ use std::process;
 use clap::Parser;
 use colored::control;
 use dictate::{
-    cache,
+    cache::Cache,
     cli::{Args, Color},
     client,
 };
+use tokio::fs::OpenOptions;
 
 struct Error {
     code: i32,
@@ -30,28 +31,44 @@ async fn run() -> Result<(), Error> {
         Color::Always => control::set_override(true),
     }
 
-    let mut entries = cache::find(&args.word).await.or_else(|e| {
-        Err(Error {
-            code: 1,
-            message: e.to_string(),
-        })
-    })?;
-
-    if entries.is_empty() {
-        entries = client::lookup_word(&args.word).await.or_else(|e| {
+    let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true))
+        .await
+        .or_else(|e| {
             Err(Error {
                 code: 1,
                 message: e.to_string(),
             })
         })?;
 
-        cache::append(&mut entries.clone()).await.or_else(|e| {
-            Err(Error {
+    let entries = match cache.lookup_word(&args.word).await {
+        Ok(entries) => {
+            if entries.is_empty() {
+                let entries = client::lookup_word(&args.word).await.or_else(|e| {
+                    Err(Error {
+                        code: 1,
+                        message: e.to_string(),
+                    })
+                })?;
+
+                cache.append(&mut entries.clone()).await.or_else(|e| {
+                    Err(Error {
+                        code: 1,
+                        message: e.to_string(),
+                    })
+                })?;
+
+                entries
+            } else {
+                entries
+            }
+        }
+        Err(err) => {
+            return Err(Error {
                 code: 1,
-                message: e.to_string(),
+                message: err.to_string(),
             })
-        })?;
-    }
+        }
+    };
 
     for (i, entry) in entries.iter().enumerate() {
         println!("{}", entry);

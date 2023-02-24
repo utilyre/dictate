@@ -1,54 +1,46 @@
-use std::path::PathBuf;
-
-use tokio::fs;
-use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
+use tokio::fs::{File, OpenOptions};
+use tokio::io::{AsyncReadExt, AsyncWriteExt, Result};
 use xdg::BaseDirectories;
 
 use crate::entry::Entry;
 
-async fn get_cache_path() -> io::Result<PathBuf> {
-    let dirs = BaseDirectories::with_prefix("dictate")?;
-    dirs.place_cache_file("entries.json")
+pub struct Cache {
+    file: File,
 }
 
-async fn get_entries() -> io::Result<Vec<Entry>> {
-    let mut cache_file = fs::OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open(&get_cache_path().await?)
-        .await?;
+impl Cache {
+    pub async fn open(opts: &OpenOptions) -> Result<Self> {
+        let dirs = BaseDirectories::with_prefix("dictate")?;
 
-    let mut cache = String::new();
-    cache_file.read_to_string(&mut cache).await?;
-    if cache.is_empty() {
-        cache = "[]".to_string();
+        let filename = dirs.place_cache_file("entries.json")?;
+        let file = opts.open(&filename).await?;
+
+        Ok(Self { file })
     }
 
-    Ok(serde_json::from_str::<Vec<Entry>>(&cache)?)
-}
+    async fn get_entries(&mut self) -> Result<Vec<Entry>> {
+        let mut json = String::new();
+        self.file.read_to_string(&mut json).await?;
 
-pub async fn find(word: &str) -> io::Result<Vec<Entry>> {
-    let entries = get_entries().await?;
+        Ok(serde_json::from_str(&json)?)
+    }
 
-    Ok(entries
-        .into_iter()
-        .filter(|e| e.word.contains(word))
-        .collect())
-}
+    pub async fn lookup_word(&mut self, word: &str) -> Result<Vec<Entry>> {
+        let entries_cache = self.get_entries().await?;
 
-pub async fn append(entries: &mut Vec<Entry>) -> io::Result<()> {
-    let mut cache = get_entries().await?;
-    cache.append(entries);
+        Ok(entries_cache
+            .into_iter()
+            .filter(|e| e.word.contains(word))
+            .collect())
+    }
 
-    let mut cache_file = fs::OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(get_cache_path().await?)
-        .await?;
+    pub async fn append(&mut self, entries: &mut Vec<Entry>) -> Result<()> {
+        let mut entries_cache = self.get_entries().await?;
+        entries_cache.append(entries);
 
-    let json = serde_json::to_string(&cache)?;
-    cache_file.write(json.as_bytes()).await?;
+        let json = serde_json::to_string(&entries_cache)?;
+        self.file.write(json.as_bytes()).await?;
 
-    Ok(())
+        Ok(())
+    }
 }
