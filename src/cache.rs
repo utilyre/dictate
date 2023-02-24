@@ -1,5 +1,7 @@
+use std::io::SeekFrom;
+
 use tokio::fs::{File, OpenOptions};
-use tokio::io::{AsyncReadExt, AsyncWriteExt, Result};
+use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt, Result};
 use xdg::BaseDirectories;
 
 use crate::entry::Entry;
@@ -20,6 +22,7 @@ impl Cache {
 
     async fn get_entries(&mut self) -> Result<Vec<Entry>> {
         let mut json = String::new();
+        self.file.seek(SeekFrom::Start(0)).await?;
         self.file.read_to_string(&mut json).await?;
         if json.is_empty() {
             json = "[]".to_string();
@@ -42,6 +45,7 @@ impl Cache {
         entries_cache.append(&mut entries.clone());
 
         let json = serde_json::to_string(&entries_cache)?;
+        self.file.seek(SeekFrom::Start(0)).await?;
         self.file.write(json.as_bytes()).await?;
 
         Ok(())
