@@ -1,7 +1,7 @@
 use clap::{Parser, ValueEnum};
 
 #[derive(Clone, ValueEnum)]
-pub enum Color {
+pub enum When {
     Auto,
     Never,
     Always,
@@ -10,10 +10,10 @@ pub enum Color {
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Args {
-    /// Word to look up in dictionary.
+    /// Word to look up in dictionary
     pub word: String,
 
-    /// Whether to use escape sequences
+    /// When to use escape sequences
     #[arg(value_enum, short = 'C', long = "color", default_value = "auto")]
-    pub color: Color,
+    pub color: When,
 }

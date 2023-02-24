@@ -4,7 +4,7 @@ use clap::Parser;
 use colored::control;
 use dictate::{
     cache::Cache,
-    cli::{Args, Color},
+    cli::{Args, When},
     client,
 };
 use tokio::fs::OpenOptions;
@@ -21,9 +21,9 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
     match args.color {
-        Color::Auto => (),
-        Color::Never => control::set_override(false),
-        Color::Always => control::set_override(true),
+        When::Auto => (),
+        When::Never => control::set_override(false),
+        When::Always => control::set_override(true),
     }
 
     let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
