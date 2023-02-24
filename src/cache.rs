@@ -9,11 +9,11 @@ pub struct Cache {
 }
 
 impl Cache {
-    pub async fn open(opts: &OpenOptions) -> Result<Self> {
+    pub async fn open(opts: &mut OpenOptions) -> Result<Self> {
         let dirs = BaseDirectories::with_prefix("dictate")?;
 
         let filename = dirs.place_cache_file("entries.json")?;
-        let file = opts.open(&filename).await?;
+        let file = opts.append(false).open(&filename).await?;
 
         Ok(Self { file })
     }
