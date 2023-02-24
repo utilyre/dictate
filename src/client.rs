@@ -4,13 +4,12 @@ use reqwest::{Client, StatusCode};
 
 use crate::entry::Entry;
 
+const BASE_URL: &str = "https://api.dictionaryapi.dev/api/v2";
+
 pub async fn fetch_word(word: &str) -> Result<Vec<Entry>, Box<dyn Error>> {
     let client = Client::new();
     let response = client
-        .get(format!(
-            "https://api.dictionaryapi.dev/api/v2/entries/en/{}",
-            word
-        ))
+        .get(format!("{}/entries/en/{}", BASE_URL, word))
         .send()
         .await;
 
