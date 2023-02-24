@@ -37,9 +37,9 @@ impl Cache {
             .collect())
     }
 
-    pub async fn append(&mut self, entries: &mut Vec<Entry>) -> Result<()> {
+    pub async fn append(&mut self, entries: &Vec<Entry>) -> Result<()> {
         let mut entries_cache = self.get_entries().await?;
-        entries_cache.append(entries);
+        entries_cache.append(&mut entries.clone());
 
         let json = serde_json::to_string(&entries_cache)?;
         self.file.write(json.as_bytes()).await?;

@@ -30,7 +30,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let mut entries = cache.lookup_word(&args.word).await?;
     if entries.is_empty() {
         entries = client::lookup_word(&args.word).await?;
-        cache.append(&mut entries.clone()).await?;
+        cache.append(&entries).await?;
     }
 
     for (i, entry) in entries.iter().enumerate() {
