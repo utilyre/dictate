@@ -21,6 +21,9 @@ impl Cache {
     async fn get_entries(&mut self) -> Result<Vec<Entry>> {
         let mut json = String::new();
         self.file.read_to_string(&mut json).await?;
+        if json.is_empty() {
+            json = "[]".to_string();
+        }
 
         Ok(serde_json::from_str(&json)?)
     }
