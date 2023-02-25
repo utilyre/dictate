@@ -148,7 +148,6 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "terminal_size",
  "textwrap",
  "tokio",
  "xdg",

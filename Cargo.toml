@@ -7,15 +7,31 @@ license = "MIT"
 description = "Simple CLI utility for looking up words in online dictionary"
 repository = "https://github.com/utilyre/dictate"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies.clap]
+version = "4.1"
+features = ["derive"]
 
-[dependencies]
-reqwest = { version = "0.11", features = ["json"] }
-serde = { version = "1.0", features = ["derive"] }
-tokio = { version = "1", features = ["full"] }
-colored = "2"
-clap = { version = "4.1.4", features = ["derive"] }
-textwrap = { version = "0.16", features = ["terminal_size"] }
-terminal_size = "0.2.5"
-xdg = "2.4.1"
-serde_json = "1.0.93"
+[dependencies.colored]
+version = "2.0"
+
+[dependencies.reqwest]
+version = "0.11"
+features = ["json"]
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[dependencies.serde_json]
+version = "1.0"
+
+[dependencies.textwrap]
+version = "0.16"
+features = ["terminal_size"]
+
+[dependencies.tokio]
+version = "1.25"
+features = ["full"]
+
+[dependencies.xdg]
+version = "2.4"
