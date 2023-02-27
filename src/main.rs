@@ -55,6 +55,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
     };
 
     for mut entry in entries.into_iter() {
+        println!();
         println!("{}", entry.charset(charset.clone()));
     }
 
