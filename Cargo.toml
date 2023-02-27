@@ -7,6 +7,9 @@ license = "MIT"
 description = "Simple CLI utility for looking up words in online dictionary"
 repository = "https://github.com/utilyre/dictate"
 
+[dependencies.atty]
+version = "0.2"
+
 [dependencies.clap]
 version = "4.1"
 features = ["derive"]
