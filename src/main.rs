@@ -6,6 +6,7 @@ use dictate::{
     cache::Cache,
     cli::{Args, When},
     client,
+    entry::Charset,
 };
 use tokio::fs::OpenOptions;
 
@@ -30,14 +31,18 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let mut entries = cache.lookup_word(&args.word).await?;
     if entries.is_empty() {
         entries = client::lookup_word(&args.word).await?;
-        cache.append(&entries).await?;
+        let entries = entries.clone();
+        cache.append(&mut entries.clone()).await?;
     }
 
-    for (i, entry) in entries.iter().enumerate() {
-        println!("{}", entry);
-        if i < entries.len() - 1 {
-            println!();
-        }
+    let charset = Charset {
+        list: "•".to_string(),
+        section_left: "".to_string(),
+        section_right: "".to_string(),
+    };
+
+    for mut entry in entries.into_iter() {
+        println!("{}", entry.charset(charset.clone()));
     }
 
     Ok(())
