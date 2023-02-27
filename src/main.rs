@@ -1,5 +1,6 @@
 use std::{error::Error, process};
 
+use atty::Stream;
 use clap::Parser;
 use colored::control;
 use dictate::{
@@ -35,10 +36,27 @@ async fn run() -> Result<(), Box<dyn Error>> {
         cache.append(&mut entries.clone()).await?;
     }
 
-    let charset = Charset {
-        list: "•".to_string(),
-        section_left: "".to_string(),
-        section_right: "".to_string(),
+    let charset = match args.ascii {
+        When::Auto if atty::is(Stream::Stdout) => Charset {
+            list: "•".to_string(),
+            section_left: "".to_string(),
+            section_right: "".to_string(),
+        },
+        When::Auto => Charset {
+            list: "*".to_string(),
+            section_left: "".to_string(),
+            section_right: "".to_string(),
+        },
+        When::Never => Charset {
+            list: "•".to_string(),
+            section_left: "".to_string(),
+            section_right: "".to_string(),
+        },
+        When::Always => Charset {
+            list: "*".to_string(),
+            section_left: "".to_string(),
+            section_right: "".to_string(),
+        },
     };
 
     for mut entry in entries.into_iter() {
