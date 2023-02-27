@@ -42,7 +42,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
             section_left: "".to_string(),
             section_right: "".to_string(),
         },
-        When::Auto => Charset {
+        When::Auto | When::Always => Charset {
             list: "*".to_string(),
             section_left: "".to_string(),
             section_right: "".to_string(),
@@ -51,11 +51,6 @@ async fn run() -> Result<(), Box<dyn Error>> {
             list: "•".to_string(),
             section_left: "".to_string(),
             section_right: "".to_string(),
-        },
-        When::Always => Charset {
-            list: "*".to_string(),
-            section_left: "".to_string(),
-            section_right: "".to_string(),
         },
     };
 
