@@ -10,7 +10,7 @@ pub enum When {
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Args {
-    /// Word to look up in dictionary
+    /// Word to look up
     pub word: String,
 
     /// When to use escape sequences
