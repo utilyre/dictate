@@ -18,10 +18,7 @@ async fn main() {
     });
 }
 
-async fn run() -> Result<(), Box<dyn Error>> {
-    let args = Args::parse();
-
-    // TODO: extract to its own function
+fn configure_color(args: &Args) {
     match args.color {
         When::Auto => (),
         When::Never => {
@@ -33,6 +30,11 @@ async fn run() -> Result<(), Box<dyn Error>> {
             charset::set_override(true);
         }
     };
+}
+
+async fn run() -> Result<(), Box<dyn Error>> {
+    let args = Args::parse();
+    configure_color(&args);
 
     let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
     let mut entries = cache.lookup_word(&args.word).await?;
