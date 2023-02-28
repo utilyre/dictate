@@ -42,9 +42,11 @@ async fn run() -> Result<(), Box<dyn Error>> {
         cache.append(&mut entries.clone()).await?;
     }
 
-    // TODO: only print empty line on the first iteration
-    for entry in entries.iter() {
-        println!();
+    for (i, entry) in entries.iter().enumerate() {
+        if i > 0 {
+            println!();
+        }
+
         println!("{}", entry);
     }
 
