@@ -23,7 +23,9 @@ pub struct Charset {
 }
 
 pub fn get() -> Charset {
-    let ch = OVERRIDE.lock().unwrap();
+    let ch = OVERRIDE
+        .lock()
+        .expect("another thread panicked while holding the lock");
 
     match &*ch {
         Some(ch) => *ch,
@@ -33,7 +35,9 @@ pub fn get() -> Charset {
 }
 
 pub fn set_override(utf8: bool) {
-    let mut ch = OVERRIDE.lock().unwrap();
+    let mut ch = OVERRIDE
+        .lock()
+        .expect("another thread panicked while holding the lock");
 
     if utf8 {
         *ch = Some(CHARSET_UTF8)
