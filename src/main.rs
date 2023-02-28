@@ -22,7 +22,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
     // TODO: extract to its own function
-     match args.color {
+    match args.color {
         When::Auto => (),
         When::Never => {
             control::set_override(false);
