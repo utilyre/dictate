@@ -1,13 +1,12 @@
 use std::{error::Error, process};
 
-use atty::Stream;
 use clap::Parser;
 use colored::control;
 use dictate::{
     cache::Cache,
+    charset,
     cli::{Args, When},
     client,
-    entry::Charset,
 };
 use tokio::fs::OpenOptions;
 
@@ -22,39 +21,16 @@ async fn main() {
 async fn run() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
-    let charset = match args.color {
-        When::Auto => {
-            if atty::is(Stream::Stdout) {
-                Charset {
-                    list: "•".to_string(),
-                    section_left: "".to_string(),
-                    section_right: "".to_string(),
-                }
-            } else {
-                Charset {
-                    list: "*".to_string(),
-                    section_left: "<".to_string(),
-                    section_right: ">".to_string(),
-                }
-            }
-        }
+    // TODO: extract to its own function
+     match args.color {
+        When::Auto => (),
         When::Never => {
             control::set_override(false);
-
-            Charset {
-                list: "*".to_string(),
-                section_left: "<".to_string(),
-                section_right: ">".to_string(),
-            }
+            charset::set_override(false);
         }
         When::Always => {
             control::set_override(true);
-
-            Charset {
-                list: "•".to_string(),
-                section_left: "".to_string(),
-                section_right: "".to_string(),
-            }
+            charset::set_override(true);
         }
     };
 
@@ -66,9 +42,10 @@ async fn run() -> Result<(), Box<dyn Error>> {
         cache.append(&mut entries.clone()).await?;
     }
 
-    for mut entry in entries.into_iter() {
+    // TODO: only print empty line on the first iteration
+    for entry in entries.iter() {
         println!();
-        println!("{}", entry.charset(charset.clone()));
+        println!("{}", entry);
     }
 
     Ok(())

@@ -4,48 +4,28 @@ use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use textwrap::Options;
 
-#[derive(Debug, Clone)]
-pub struct Charset {
-    pub list: String,
-    pub section_left: String,
-    pub section_right: String,
-}
-
-impl Default for Charset {
-    fn default() -> Self {
-        Self {
-            list: "•".to_string(),
-            section_left: "".to_string(),
-            section_right: "".to_string(),
-        }
-    }
-}
+use crate::charset;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Entry {
-    #[serde(skip)]
-    charset: Charset,
-
     pub word: String,
     phonetics: Vec<Phonetic>,
     meanings: Vec<Meaning>,
 }
 
-impl Entry {
-    pub fn charset(&mut self, value: Charset) -> &mut Self {
-        self.charset = value;
-        self
-    }
-}
-
 impl Display for Entry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let ch = charset::get();
+        let list = String::from(ch.list);
+        let section_left = String::from(ch.section_left);
+        let section_right = String::from(ch.section_right);
+
         write!(
             f,
             "{}{}{}",
-            self.charset.section_left.white(),
+            section_left.white(),
             self.word.bold().black().on_white(),
-            self.charset.section_right.white()
+            section_right.white()
         )?;
 
         if let Some(phonetic) = self.phonetics.iter().find(|p| p.text.is_some()) {
@@ -89,10 +69,7 @@ impl Display for Entry {
                 write!(
                     f,
                     "\n{}",
-                    textwrap::fill(
-                        &format!("{} {}", self.charset.list.blue(), definition.brief),
-                        &depth2
-                    )
+                    textwrap::fill(&format!("{} {}", list.blue(), definition.brief), &depth2)
                 )?;
 
                 if let Some(example) = &definition.example {
@@ -102,7 +79,7 @@ impl Display for Entry {
                         textwrap::fill(
                             &format!(
                                 "{} {}{}{}",
-                                self.charset.list.yellow(),
+                                list.yellow(),
                                 "\"".italic().bright_black(),
                                 example.italic().bright_black(),
                                 "\"".italic().bright_black()
@@ -126,9 +103,9 @@ impl Display for Entry {
                                 .iter()
                                 .map(|s| format!(
                                     "{}{}{}",
-                                    self.charset.section_left.white(),
+                                    section_left.white(),
                                     s.black().on_white(),
-                                    self.charset.section_right.white()
+                                    section_right.white()
                                 ))
                                 .collect::<Vec<_>>()
                                 .join(" ")
@@ -151,9 +128,9 @@ impl Display for Entry {
                                 .iter()
                                 .map(|a| format!(
                                     "{}{}{}",
-                                    self.charset.section_left.white(),
+                                    section_left.white(),
                                     a.black().on_white(),
-                                    self.charset.section_right.white()
+                                    section_right.white()
                                 ))
                                 .collect::<Vec<_>>()
                                 .join(" ")
