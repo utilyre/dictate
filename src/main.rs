@@ -22,11 +22,41 @@ async fn main() {
 async fn run() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
-    match args.color {
-        When::Auto => (),
-        When::Never => control::set_override(false),
-        When::Always => control::set_override(true),
-    }
+    let charset = match args.color {
+        When::Auto => {
+            if atty::is(Stream::Stdout) {
+                Charset {
+                    list: "•".to_string(),
+                    section_left: "".to_string(),
+                    section_right: "".to_string(),
+                }
+            } else {
+                Charset {
+                    list: "*".to_string(),
+                    section_left: "<".to_string(),
+                    section_right: ">".to_string(),
+                }
+            }
+        }
+        When::Never => {
+            control::set_override(false);
+
+            Charset {
+                list: "*".to_string(),
+                section_left: "<".to_string(),
+                section_right: ">".to_string(),
+            }
+        }
+        When::Always => {
+            control::set_override(true);
+
+            Charset {
+                list: "•".to_string(),
+                section_left: "".to_string(),
+                section_right: "".to_string(),
+            }
+        }
+    };
 
     let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
     let mut entries = cache.lookup_word(&args.word).await?;
@@ -35,24 +65,6 @@ async fn run() -> Result<(), Box<dyn Error>> {
         let entries = entries.clone();
         cache.append(&mut entries.clone()).await?;
     }
-
-    let charset = match args.ascii {
-        When::Auto if atty::is(Stream::Stdout) => Charset {
-            list: "•".to_string(),
-            section_left: "".to_string(),
-            section_right: "".to_string(),
-        },
-        When::Auto | When::Always => Charset {
-            list: "*".to_string(),
-            section_left: "".to_string(),
-            section_right: "".to_string(),
-        },
-        When::Never => Charset {
-            list: "•".to_string(),
-            section_left: "".to_string(),
-            section_right: "".to_string(),
-        },
-    };
 
     for mut entry in entries.into_iter() {
         println!();
