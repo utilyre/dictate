@@ -26,4 +26,12 @@ pub enum Command {
         /// Word to lookup
         word: String,
     },
+
+    /// Clean cache, data, or state
+    #[command(arg_required_else_help = true)]
+    Clean {
+        /// Whether to clean cache
+        #[arg(short = 'c', long = "cache")]
+        cache: bool,
+    },
 }

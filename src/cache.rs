@@ -1,6 +1,7 @@
 use std::io::SeekFrom;
+use std::path::PathBuf;
 
-use tokio::fs::{File, OpenOptions};
+use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt, Result};
 use xdg::BaseDirectories;
 
@@ -11,13 +12,15 @@ pub struct Cache {
 }
 
 impl Cache {
-    pub async fn open(opts: &mut OpenOptions) -> Result<Self> {
+    fn get_path() -> Result<PathBuf> {
         let dirs = BaseDirectories::with_prefix("dictate")?;
+        Ok(dirs.place_cache_file("entries.json")?)
+    }
 
-        let filename = dirs.place_cache_file("entries.json")?;
-        let file = opts.append(false).open(&filename).await?;
-
-        Ok(Self { file })
+    pub async fn open(opts: &mut OpenOptions) -> Result<Self> {
+        Ok(Self {
+            file: opts.append(false).open(&Self::get_path()?).await?,
+        })
     }
 
     async fn get_entries(&mut self) -> Result<Vec<Entry>> {
@@ -47,6 +50,16 @@ impl Cache {
         let json = serde_json::to_string(&entries_cache)?;
         self.file.seek(SeekFrom::Start(0)).await?;
         self.file.write(json.as_bytes()).await?;
+
+        Ok(())
+    }
+
+    pub async fn clean(self) -> Result<()> {
+        drop(self.file);
+
+        let mut parent = Self::get_path()?;
+        parent.pop();
+        fs::remove_dir_all(parent).await?;
 
         Ok(())
     }

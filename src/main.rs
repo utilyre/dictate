@@ -23,9 +23,10 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
     configure_color(&cli.color);
 
+    let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
     match cli.command {
         Command::Lookup { word } => {
-            let entries = fetch_entries(&word).await?;
+            let entries = fetch_entries(&mut cache, &word).await?;
 
             for (i, entry) in entries.iter().enumerate() {
                 if i > 0 {
@@ -33,6 +34,12 @@ async fn run() -> Result<(), Box<dyn Error>> {
                 }
 
                 println!("{}", entry);
+            }
+        }
+
+        Command::Clean { cache: cache_flag } => {
+            if cache_flag {
+                cache.clean().await?;
             }
         }
     }
@@ -54,8 +61,7 @@ fn configure_color(color: &When) {
     };
 }
 
-async fn fetch_entries(word: &str) -> Result<Vec<Entry>, Box<dyn Error>> {
-    let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
+async fn fetch_entries(cache: &mut Cache, word: &str) -> Result<Vec<Entry>, Box<dyn Error>> {
     let mut entries = cache.lookup_word(word).await?;
     if entries.is_empty() {
         entries = client::lookup_word(word).await?;
