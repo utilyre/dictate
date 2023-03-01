@@ -19,6 +19,21 @@ async fn main() {
     });
 }
 
+async fn run() -> Result<(), Box<dyn Error>> {
+    let args = Args::parse();
+    configure_color(&args);
+
+    for (i, entry) in fetch_entries(&args).await?.iter().enumerate() {
+        if i > 0 {
+            println!();
+        }
+
+        println!("{}", entry);
+    }
+
+    Ok(())
+}
+
 fn configure_color(args: &Args) {
     match args.color {
         When::Auto => (),
@@ -43,19 +58,4 @@ async fn fetch_entries(args: &Args) -> Result<Vec<Entry>, Box<dyn Error>> {
     }
 
     Ok(entries)
-}
-
-async fn run() -> Result<(), Box<dyn Error>> {
-    let args = Args::parse();
-    configure_color(&args);
-
-    for (i, entry) in fetch_entries(&args).await?.iter().enumerate() {
-        if i > 0 {
-            println!();
-        }
-
-        println!("{}", entry);
-    }
-
-    Ok(())
 }
