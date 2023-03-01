@@ -1,3 +1,4 @@
+use std::fmt::Write;
 use std::{error::Error, process};
 
 use clap::Parser;
@@ -9,6 +10,7 @@ use dictate::{
     client,
     entry::Entry,
 };
+use minus::Pager;
 use tokio::fs::OpenOptions;
 
 #[tokio::main]
@@ -23,17 +25,19 @@ async fn run() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
     configure_color(&cli.color);
 
+    let mut pager = Pager::new();
     let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
+
     match cli.command {
         Command::Lookup { word } => {
             let entries = fetch_entries(&mut cache, &word).await?;
 
             for (i, entry) in entries.iter().enumerate() {
                 if i > 0 {
-                    println!();
+                    writeln!(pager)?;
                 }
 
-                println!("{}", entry);
+                writeln!(pager, "{}", entry)?;
             }
         }
 
@@ -43,6 +47,9 @@ async fn run() -> Result<(), Box<dyn Error>> {
             }
         }
     }
+
+    pager.set_run_no_overflow(true)?;
+    minus::page_all(pager)?;
 
     Ok(())
 }
