@@ -6,7 +6,7 @@ use textwrap::Options;
 
 use crate::charset;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Entry {
     pub word: String,
     phonetics: Vec<Phonetic>,
@@ -145,12 +145,12 @@ impl Display for Entry {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Phonetic {
     text: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Meaning {
     #[serde(rename = "partOfSpeech")]
     part_of_speech: String,
@@ -160,7 +160,7 @@ struct Meaning {
     antonyms: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Definition {
     #[serde(rename = "definition")]
     brief: String,
