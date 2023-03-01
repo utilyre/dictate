@@ -17,6 +17,10 @@ features = ["derive"]
 [dependencies.colored]
 version = "2.0"
 
+[dependencies.minus]
+version = "5.1"
+features = ["search", "static_output"]
+
 [dependencies.reqwest]
 version = "0.11"
 features = ["json"]
