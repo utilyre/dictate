@@ -39,7 +39,7 @@ impl Cache {
 
         Ok(entries_cache
             .into_iter()
-            .filter(|e| e.word.contains(word))
+            .filter(|e| e.word == word)
             .collect())
     }
 
