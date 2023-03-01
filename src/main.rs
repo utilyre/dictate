@@ -65,7 +65,6 @@ async fn fetch_entries(cache: &mut Cache, word: &str) -> Result<Vec<Entry>, Box<
     let mut entries = cache.lookup_word(word).await?;
     if entries.is_empty() {
         entries = client::lookup_word(word).await?;
-        let entries = entries.clone();
         cache.append(&mut entries.clone()).await?;
     }
 
