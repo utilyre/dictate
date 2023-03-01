@@ -7,6 +7,7 @@ use dictate::{
     charset,
     cli::{Args, When},
     client,
+    entry::Entry,
 };
 use tokio::fs::OpenOptions;
 
@@ -32,10 +33,7 @@ fn configure_color(args: &Args) {
     };
 }
 
-async fn run() -> Result<(), Box<dyn Error>> {
-    let args = Args::parse();
-    configure_color(&args);
-
+async fn fetch_entries(args: &Args) -> Result<Vec<Entry>, Box<dyn Error>> {
     let mut cache = Cache::open(OpenOptions::new().read(true).write(true).create(true)).await?;
     let mut entries = cache.lookup_word(&args.word).await?;
     if entries.is_empty() {
@@ -44,7 +42,14 @@ async fn run() -> Result<(), Box<dyn Error>> {
         cache.append(&mut entries.clone()).await?;
     }
 
-    for (i, entry) in entries.iter().enumerate() {
+    Ok(entries)
+}
+
+async fn run() -> Result<(), Box<dyn Error>> {
+    let args = Args::parse();
+    configure_color(&args);
+
+    for (i, entry) in fetch_entries(&args).await?.iter().enumerate() {
         if i > 0 {
             println!();
         }
