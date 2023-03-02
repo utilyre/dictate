@@ -1,7 +1,7 @@
 use std::fmt::Write;
 use std::{error::Error, process};
 
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use colored::control;
 use dictate::{
     cache::Cache,
@@ -45,6 +45,15 @@ async fn run() -> Result<(), Box<dyn Error>> {
             if cache_flag {
                 cache.clean().await?;
             }
+        }
+
+        Command::Complete { shell } => {
+            clap_complete::generate(
+                shell,
+                &mut Cli::command(),
+                "dictate",
+                &mut std::io::stdout(),
+            );
         }
     }
 
