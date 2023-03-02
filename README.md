@@ -37,6 +37,17 @@ without interrupting your workflow.
 
 ## 💻 Shell Completion
 
+-   Bash
+
+    1. Run the following
+
+        ```bash
+        mkdir -p ~/.local/share/bash-completion/completions
+        dictate complete bash > ~/.local/share/bash-completion/completions/rustup
+        ```
+
+    2. Restart bash and you should have tab-completion now.
+
 -   Zsh
 
     1. Append `~/.zfunc` to `fpath` in your zsh config
@@ -60,3 +71,14 @@ without interrupting your workflow.
 
     **NOTE**: In case it's not working yet, delete `~/.zcompdump` and restart
     your shell again.
+
+-   Fish
+
+    1. Run the following
+
+        ```fish
+        mkdir -p ~/.config/fish/completions
+        dictate complete fish > ~/.config/fish/completions/rustup.fish
+        ```
+
+    2. Restart fish and you should have tab-completion now.
