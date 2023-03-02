@@ -11,11 +11,13 @@ without interrupting your workflow.
 
 ## 📦 Installation
 
--   [crates.io]
+-   [crates.io][dictate]
 
     ```bash
     cargo install dictate
     ```
+
+[dictate]: https://crates.io/crates/dictate
 
 ## 🚀 Usage
 
