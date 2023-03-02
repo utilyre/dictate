@@ -58,5 +58,5 @@ without interrupting your workflow.
 
     3. Restart zsh and you should have tab-completion now.
 
-    **NOTE**: In case it's not working yet, remove `~/.zcompdump` and restart
+    **NOTE**: In case it's not working yet, delete `~/.zcompdump` and restart
     your shell again.
