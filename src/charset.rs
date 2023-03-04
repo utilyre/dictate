@@ -1,5 +1,3 @@
-use std::sync::Mutex;
-
 use atty::Stream;
 
 static CHARSET_UTF8: Charset = Charset {
@@ -13,7 +11,7 @@ static CHARSET_ASCII: Charset = Charset {
     section_right: '>',
 };
 
-static OVERRIDE: Mutex<Option<Charset>> = Mutex::new(None);
+static OVERRIDE: std::sync::Mutex<Option<Charset>> = std::sync::Mutex::new(None);
 
 #[derive(Clone, Copy)]
 pub struct Charset {
