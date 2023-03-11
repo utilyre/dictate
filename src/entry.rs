@@ -55,15 +55,12 @@ impl Display for Entry {
             write!(
                 f,
                 "\n\n{}",
-                textwrap::fill(
-                    &meaning.part_of_speech.italic().underline().to_string(),
-                    &depth1
-                )
+                textwrap::fill(&meaning.part_of_speech.italic().underline(), &depth1)
             )?;
 
             for (i, definition) in meaning.definitions.iter().enumerate() {
                 if i > 0 {
-                    write!(f, "\n")?;
+                    writeln!(f)?;
                 }
 
                 write!(

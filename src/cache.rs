@@ -13,7 +13,7 @@ pub struct Cache {
 impl Cache {
     fn get_path() -> Result<PathBuf> {
         let dirs = BaseDirectories::with_prefix("dictate")?;
-        Ok(dirs.place_cache_file("entries.json")?)
+        dirs.place_cache_file("entries.json")
     }
 
     pub async fn open(opts: &mut OpenOptions) -> Result<Self> {
@@ -48,7 +48,7 @@ impl Cache {
 
         let json = serde_json::to_string(&entries_cache)?;
         self.file.seek(std::io::SeekFrom::Start(0)).await?;
-        self.file.write(json.as_bytes()).await?;
+        self.file.write_all(json.as_bytes()).await?;
 
         Ok(())
     }

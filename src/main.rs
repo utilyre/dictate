@@ -16,7 +16,7 @@ use tokio::fs::OpenOptions;
 #[tokio::main]
 async fn main() {
     run().await.unwrap_or_else(|e| {
-        eprintln!("dictate: {}", e.to_string());
+        eprintln!("dictate: {}", e);
         process::exit(1);
     });
 }
