@@ -52,10 +52,14 @@ impl Display for Entry {
             .subsequent_indent("      ");
 
         for meaning in self.meanings.iter() {
+            #[allow(clippy::unnecessary_to_owned)]
             write!(
                 f,
                 "\n\n{}",
-                textwrap::fill(&meaning.part_of_speech.italic().underline(), &depth1)
+                textwrap::fill(
+                    &meaning.part_of_speech.italic().underline().to_string(),
+                    &depth1
+                )
             )?;
 
             for (i, definition) in meaning.definitions.iter().enumerate() {
