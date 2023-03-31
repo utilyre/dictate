@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand, ValueEnum};
-use clap_complete::Shell;
 
 #[derive(Clone, ValueEnum)]
 pub enum When {
@@ -39,6 +38,6 @@ pub enum Command {
     /// Generate shell completion
     Complete {
         /// Shell to generate completion for
-        shell: Shell,
+        shell: String,
     },
 }
