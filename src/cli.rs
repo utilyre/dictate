@@ -21,7 +21,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Command {
     /// Lookup word in dictionary
-    #[clap(alias = "search")]
+    #[clap(visible_alias = "search")]
     Lookup {
         /// Word to lookup
         word: String,
