@@ -194,7 +194,7 @@ dependencies = [
 
 [[package]]
 name = "dictate"
-version = "0.8.3"
+version = "0.8.4"
 dependencies = [
  "atty",
  "clap",
