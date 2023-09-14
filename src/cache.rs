@@ -1,8 +1,9 @@
+use std::fs as std_fs;
 use std::path::PathBuf;
 
+use directories::BaseDirs;
 use tokio::fs::{self, File, OpenOptions};
-use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt, Result};
-use xdg::BaseDirectories;
+use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt, Error, ErrorKind, Result};
 
 use crate::entry::Entry;
 
@@ -12,8 +13,12 @@ pub struct Cache {
 
 impl Cache {
     fn get_path() -> Result<PathBuf> {
-        let dirs = BaseDirectories::with_prefix("dictate")?;
-        dirs.place_cache_file("entries.json")
+        let dirs = BaseDirs::new()
+            .ok_or(Error::new(ErrorKind::Other, "Cannot determine cache directory because no valid home directory path could be retrieved from the operating system."))?
+            .cache_dir()
+            .join("dictate");
+        std_fs::create_dir_all(&dirs)?;
+        Ok(dirs.join("entries.json"))
     }
 
     pub async fn open(opts: &mut OpenOptions) -> Result<Self> {
