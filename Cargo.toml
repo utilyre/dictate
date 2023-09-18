@@ -8,6 +8,9 @@ description = "CLI utility for looking up words in online dictionary "
 repository = "https://github.com/utilyre/dictate"
 build = true
 
+[dependencies]
+directories = "5.0.1"
+
 [dependencies.atty]
 version = "0.2"
 
@@ -40,9 +43,6 @@ features = ["terminal_size"]
 [dependencies.tokio]
 version = "1.25"
 features = ["full"]
-
-[dependencies.xdg]
-version = "2.4"
 
 [build-dependencies.clap]
 version = "4.1"
