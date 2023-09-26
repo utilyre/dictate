@@ -1,7 +1,8 @@
 use std::fmt::Write;
+use std::io as std_io;
 use std::{error::Error, process};
 
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use colored::control;
 use dictate::{
     cache::Cache,
@@ -48,18 +49,7 @@ async fn run() -> Result<(), Box<dyn Error>> {
         }
 
         Command::Complete { shell } => {
-            let completion = match shell.as_str() {
-                "bash" => include_str!(concat!(env!("OUT_DIR"), "/bash/dictate.bash")),
-                "elvish" => include_str!(concat!(env!("OUT_DIR"), "/elvish/dictate.elv")),
-                "fish" => include_str!(concat!(env!("OUT_DIR"), "/fish/dictate.fish")),
-                "powershell" => {
-                    include_str!(concat!(env!("OUT_DIR"), "/powershell/_dictate.ps1"))
-                }
-                "zsh" => include_str!(concat!(env!("OUT_DIR"), "/zsh/_dictate")),
-                _ => return Err(format!("shell `{}` not supported", shell).into()),
-            };
-
-            println!("{}", completion);
+            clap_complete::generate(shell, &mut Cli::command(), "dictate", &mut std_io::stdout());
         }
     }
 
